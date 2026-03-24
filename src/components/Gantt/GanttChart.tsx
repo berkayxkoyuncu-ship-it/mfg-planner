@@ -117,6 +117,7 @@ export function GanttChart({ lines, orders, actuals, onOrderClick, onAddOrder, o
 
   const pendingTrimPxRef = useRef(0)
   const pendingAddPxRef = useRef(0)
+  const pendingScrollToPxRef = useRef<number | null>(null)
   const isButtonNavRef = useRef(false)
   const viewStartRef = useRef(viewStart)
   const isScrollBusyRef = useRef(false)
@@ -146,6 +147,17 @@ export function GanttChart({ lines, orders, actuals, onOrderClick, onAddOrder, o
     isButtonNavRef.current = true
     setViewStart((d) => startOfMonth(addMonths(d, months)))
     setViewEnd((d) => endOfMonth(addMonths(d, months)))
+  }
+
+  const goToToday = () => {
+    const today = new Date()
+    const monthStart = startOfMonth(today)
+    const todayOffset = dateToOffset(format(today, 'yyyy-MM-dd'), monthStart)
+    const clientWidth = scrollRef.current?.clientWidth ?? 0
+    pendingScrollToPxRef.current = Math.max(0, todayOffset - clientWidth / 3)
+    isButtonNavRef.current = true
+    setViewStart(monthStart)
+    setViewEnd(endOfMonth(addMonths(today, 2)))
   }
 
   /**
@@ -210,7 +222,9 @@ export function GanttChart({ lines, orders, actuals, onOrderClick, onAddOrder, o
 
     if (isButtonNavRef.current && scrollRef.current) {
       isScrollBusyRef.current = true
-      scrollRef.current.scrollLeft = 0
+      const scrollTo = pendingScrollToPxRef.current ?? 0
+      pendingScrollToPxRef.current = null
+      scrollRef.current.scrollLeft = scrollTo
       isButtonNavRef.current = false
       requestAnimationFrame(() => {
         isScrollBusyRef.current = false
@@ -329,6 +343,16 @@ export function GanttChart({ lines, orders, actuals, onOrderClick, onAddOrder, o
           >
             Sonraki
             <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M4.5 2L8.5 6L4.5 10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+          </button>
+          <div style={{ width: '1px', height: '16px', background: '#e5e7eb', flexShrink: 0 }} />
+          <button
+            onClick={goToToday}
+            className="flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-medium transition-all duration-150"
+            style={{ color: '#2563eb', background: '#eff6ff', fontFamily: "'DM Sans', sans-serif", border: '1px solid #bfdbfe' }}
+            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = '#dbeafe' }}
+            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = '#eff6ff' }}
+          >
+            Bugün
           </button>
         </div>
 
