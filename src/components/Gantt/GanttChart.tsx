@@ -6,7 +6,7 @@ import {
 } from '@dnd-kit/core'
 import { format, addMonths, startOfMonth, endOfMonth, getDaysInMonth } from 'date-fns'
 import type { Line, Order, DailyActual } from '../../lib/supabase'
-import { buildDayCells, DAY_WIDTH, offsetToDate, defaultViewWindow } from '../../lib/dateUtils'
+import { buildDayCells, DAY_WIDTH, offsetToDate, dateToOffset, defaultViewWindow } from '../../lib/dateUtils'
 import { snapToWorkingDay, addWorkingDays, ordersOverlapRange } from '../../lib/calculations'
 import { useHolidayContext } from '../../contexts/HolidayContext'
 import { GanttRow } from './GanttRow'

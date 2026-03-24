@@ -3,6 +3,7 @@ import {
   format, parseISO, addDays, isWeekend, startOfWeek, isSameMonth,
   differenceInDays
 } from 'date-fns'
+import { tr } from 'date-fns/locale'
 
 export type DayCell = {
   date: string        // yyyy-MM-dd
@@ -34,7 +35,7 @@ export function buildDayCells(
       isToday: iso === today,
       isHoliday: holidayMap.has(iso),
       holidayName: holidayMap.get(iso) ?? '',
-      monthLabel: isFirstOfMonth ? format(d, 'MMMM yyyy') : '',
+      monthLabel: isFirstOfMonth ? format(d, 'MMMM yyyy', { locale: tr }) : '',
       weekLabel: isFirstOfWeek ? `W${format(d, 'w')}` : '',
     }
   })
