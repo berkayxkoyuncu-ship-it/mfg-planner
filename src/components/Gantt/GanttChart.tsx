@@ -5,6 +5,7 @@ import {
   type DragStartEvent, type DragEndEvent
 } from '@dnd-kit/core'
 import { format, addMonths, startOfMonth, endOfMonth, getDaysInMonth } from 'date-fns'
+import { tr } from 'date-fns/locale'
 import type { Line, Order, DailyActual } from '../../lib/supabase'
 import { buildDayCells, DAY_WIDTH, offsetToDate, dateToOffset, defaultViewWindow } from '../../lib/dateUtils'
 import { snapToWorkingDay, addWorkingDays, ordersOverlapRange } from '../../lib/calculations'
@@ -332,7 +333,7 @@ export function GanttChart({ lines, orders, actuals, onOrderClick, onAddOrder, o
             className="text-center flex-1"
             style={{ color: '#374151', fontSize: '13px', fontWeight: 500, fontFamily: "'DM Sans', sans-serif" }}
           >
-            {format(viewStart, 'MMMM yyyy')} — {format(viewEnd, 'MMMM yyyy')}
+            {format(viewStart, 'MMMM yyyy', { locale: tr })} — {format(viewEnd, 'MMMM yyyy', { locale: tr })}
           </span>
           <button
             onClick={() => shiftMonth(1)}
