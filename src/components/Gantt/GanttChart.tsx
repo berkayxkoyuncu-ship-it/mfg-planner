@@ -458,13 +458,13 @@ export function GanttChart({ lines, orders, actuals, onOrderClick, onAddOrder, o
                       title={cell.holidayName || undefined}
                       style={{
                         width: DAY_WIDTH,
-                        borderRight: '1px solid #f0f1f3',
+                        borderRight: `1px solid ${cell.isHoliday ? '#fca5a5' : cell.isToday ? '#93c5fd' : cell.isWeekend ? '#d1d5db' : '#e5e7eb'}`,
                         padding: '3px 0',
                         fontSize: '10px',
                         fontWeight: cell.isToday ? 700 : 400,
-                        color: cell.isHoliday ? '#dc2626' : cell.isToday ? '#1d4ed8' : cell.isWeekend ? '#d1d5db' : '#9ca3af',
-                        background: cell.isHoliday ? '#fef2f2' : cell.isToday ? '#eff6ff' : cell.isWeekend ? '#f9fafb' : 'transparent',
-                        borderTop: cell.isToday ? '2px solid #2563eb' : cell.isHoliday ? '2px solid #fecaca' : undefined,
+                        color: cell.isHoliday ? '#dc2626' : cell.isToday ? '#1d4ed8' : cell.isWeekend ? '#9ca3af' : '#6b7280',
+                        background: cell.isHoliday ? '#fde8e8' : cell.isToday ? '#dbeafe' : cell.isWeekend ? '#e8eaed' : '#ffffff',
+                        borderTop: cell.isToday ? '2px solid #2563eb' : cell.isHoliday ? '2px solid #ef4444' : undefined,
                       }}
                     >
                       {cell.label}

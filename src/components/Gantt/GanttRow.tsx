@@ -59,14 +59,14 @@ export function GanttRow({ line, orders, dayCells, viewStart, actualsMap, onOrde
             style={{
               left: i * DAY_WIDTH,
               width: DAY_WIDTH,
-              borderRight: `1px solid ${cell.isHoliday ? '#fecaca' : cell.isToday ? '#bfdbfe' : '#f0f1f3'}`,
+              borderRight: `1px solid ${cell.isHoliday ? '#fca5a5' : cell.isToday ? '#93c5fd' : cell.isWeekend ? '#d1d5db' : '#e5e7eb'}`,
               background: cell.isHoliday
-                ? '#fef2f2'
+                ? '#fde8e8'
                 : cell.isToday
-                ? '#eff6ff'
+                ? '#dbeafe'
                 : cell.isWeekend
-                ? '#f9fafb'
-                : 'transparent',
+                ? '#e8eaed'
+                : '#ffffff',
             }}
           />
         ))}
