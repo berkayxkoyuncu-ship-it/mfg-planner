@@ -4,7 +4,7 @@ import { useDraggable } from '@dnd-kit/core'
 import { differenceInDays, parseISO } from 'date-fns'
 import type { Order } from '../../lib/supabase'
 import { DAY_WIDTH, dateToOffset } from '../../lib/dateUtils'
-import { workingDaysRemaining, calcDailyNeeded } from '../../lib/calculations'
+import { orderRemainingDays, calcDailyNeeded } from '../../lib/calculations'
 import { useHolidayContext } from '../../contexts/HolidayContext'
 
 interface Props {
@@ -78,7 +78,7 @@ export function GanttOrderBlock({ order, viewStart, totalActual, onClick }: Prop
 
   const pct = order.quantity > 0 ? Math.min(100, Math.round((totalActual / order.quantity) * 100)) : 0
   const remainingQty = Math.max(0, order.quantity - totalActual)
-  const remDays = workingDaysRemaining(order.end_date!, holidaySet)
+  const remDays = orderRemainingDays(order.start_date!, order.end_date!, holidaySet)
   const dailyNeeded = calcDailyNeeded(order.quantity, totalActual, order.end_date!, order.start_date ?? undefined, holidaySet)
   const isBehind = dailyNeeded > order.daily_capacity
   const isDone = pct >= 100

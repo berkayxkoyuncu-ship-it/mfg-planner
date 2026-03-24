@@ -86,6 +86,14 @@ export function workingDaysBetween(startStr: string, endStr: string, holidaySet?
   return count
 }
 
+/** Sipariş için kalan iş günü: başlamadıysa start→end arası, başladıysa bugün→end arası */
+export function orderRemainingDays(startDateStr: string, endDateStr: string, holidaySet?: Set<string>): number {
+  const todayStr = format(startOfDay(new Date()), 'yyyy-MM-dd')
+  return startDateStr > todayStr
+    ? workingDaysBetween(startDateStr, endDateStr, holidaySet)
+    : workingDaysRemaining(endDateStr, holidaySet)
+}
+
 /**
  * Zamanında bitirmek için gereken günlük üretim miktarı.
  * startDateStr gelecekteyse planlanan pencereyi (start→end) kullanır;
