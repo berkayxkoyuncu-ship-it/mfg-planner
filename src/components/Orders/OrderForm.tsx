@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import type { Order, Line } from '../../lib/supabase'
+import type { Order, Line, Brand } from '../../lib/supabase'
 import { calcDaysNeeded, calcEndDate } from '../../lib/calculations'
 import { format } from 'date-fns'
 
@@ -12,12 +12,13 @@ const PRESET_COLORS = [
 interface Props {
   order?: Order | null
   lines: Line[]
+  brands: Brand[]
   onSave: (data: Partial<Order>) => Promise<void>
   onDelete?: () => Promise<void>
   onClose: () => void
 }
 
-export function OrderForm({ order, lines, onSave, onDelete, onClose }: Props) {
+export function OrderForm({ order, lines, brands, onSave, onDelete, onClose }: Props) {
   const [brand, setBrand] = useState(order?.brand ?? '')
   const [style, setStyle] = useState(order?.style ?? '')
   const [quantity, setQuantity] = useState(order?.quantity?.toString() ?? '')
@@ -25,6 +26,7 @@ export function OrderForm({ order, lines, onSave, onDelete, onClose }: Props) {
   const [targetShip, setTargetShip] = useState(order?.target_ship_date ?? '')
   const [color, setColor] = useState(order?.color ?? PRESET_COLORS[0])
   const [status, setStatus] = useState<Order['status']>(order?.status ?? 'planned')
+  const [anaMarka, setAnaMarka] = useState(order?.ana_marka ?? '')
   const [saving, setSaving] = useState(false)
   const [deleting, setDeleting] = useState(false)
   const [error, setError] = useState('')
@@ -41,7 +43,7 @@ export function OrderForm({ order, lines, onSave, onDelete, onClose }: Props) {
     if (cap <= 0) { setError("Günlük kapasite 0'dan büyük olmalıdır"); return }
     setSaving(true); setError('')
     try {
-      await onSave({ brand: brand.trim(), style: style.trim(), quantity: qty, daily_capacity: cap, target_ship_date: targetShip || null, color, status })
+      await onSave({ brand: brand.trim(), style: style.trim(), quantity: qty, daily_capacity: cap, target_ship_date: targetShip || null, color, status, ana_marka: anaMarka || null })
       onClose()
     } catch (e: any) {
       setError(e.message ?? 'Kayıt başarısız')
@@ -68,6 +70,20 @@ export function OrderForm({ order, lines, onSave, onDelete, onClose }: Props) {
         </div>
 
         <div className="space-y-4">
+          <div>
+            <label className="text-xs font-medium text-slate-600 mb-1 block">Ana MARKA</label>
+            <select
+              className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              value={anaMarka}
+              onChange={(e) => setAnaMarka(e.target.value)}
+            >
+              <option value="">— Seçiniz —</option>
+              {brands.map((b) => (
+                <option key={b.id} value={b.name}>{b.name}</option>
+              ))}
+            </select>
+          </div>
+
           <div className="grid grid-cols-2 gap-3">
             <div>
               <label className="text-xs font-medium text-slate-600 mb-1 block">Marka *</label>

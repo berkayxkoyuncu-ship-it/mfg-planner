@@ -2,6 +2,7 @@ import { useState, useCallback } from 'react'
 import { useLines } from '../hooks/useLines'
 import { useOrders } from '../hooks/useOrders'
 import { useActuals } from '../hooks/useActuals'
+import { useBrands } from '../hooks/useBrands'
 import { GanttChart } from '../components/Gantt/GanttChart'
 import { OrderForm } from '../components/Orders/OrderForm'
 import type { Order } from '../lib/supabase'
@@ -11,6 +12,7 @@ import { useHolidayContext } from '../contexts/HolidayContext'
 export function PlanningPage() {
   const { lines, loading: linesLoading } = useLines()
   const { orders, loading: ordersLoading, createOrder, updateOrder, deleteOrder, assignToLine } = useOrders()
+  const { brands } = useBrands()
   const { actuals } = useActuals()
   const { holidaySet } = useHolidayContext()
   const [editingOrder, setEditingOrder] = useState<Order | null | undefined>(undefined)
@@ -35,6 +37,7 @@ export function PlanningPage() {
         start_date: null,
         status: 'planned',
         color: data.color ?? '#6366f1',
+        ana_marka: data.ana_marka ?? null,
       })
     } else if (editingOrder) {
       const patch: Partial<Order> = { ...data }
@@ -75,6 +78,7 @@ export function PlanningPage() {
         <OrderForm
           order={editingOrder}
           lines={lines}
+          brands={brands}
           onSave={handleSave}
           onDelete={editingOrder ? handleDelete : undefined}
           onClose={handleClose}

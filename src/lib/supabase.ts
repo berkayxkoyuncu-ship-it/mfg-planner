@@ -14,6 +14,13 @@ export type Line = {
   created_at: string
 }
 
+export type Brand = {
+  id: string
+  name: string
+  sort_order: number
+  created_at: string
+}
+
 export type Order = {
   id: string
   brand: string
@@ -27,6 +34,7 @@ export type Order = {
   end_date: string | null
   status: 'planned' | 'in_progress' | 'completed'
   color: string
+  ana_marka: string | null
   created_at: string
 }
 

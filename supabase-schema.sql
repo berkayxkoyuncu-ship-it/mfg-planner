@@ -58,3 +58,27 @@ insert into lines (name, type, sort_order) values
   ('Line 2', 'internal', 2),
   ('Line 3', 'internal', 3)
 on conflict do nothing;
+
+-- Brands table
+create table if not exists brands (
+  id uuid primary key default gen_random_uuid(),
+  name text not null unique,
+  sort_order int not null default 0,
+  created_at timestamptz not null default now()
+);
+
+-- Enable Row Level Security for brands
+alter table brands enable row level security;
+create policy "Public access" on brands for all using (true) with check (true);
+
+-- Seed default brands
+insert into brands (name, sort_order) values
+  ('Mavi', 1),
+  ('Opus', 2),
+  ('RAG AND BONE', 3),
+  ('REISS', 4),
+  ('Bamigo', 5)
+on conflict do nothing;
+
+-- Add ana_marka column to orders (nullable so existing orders aren't broken)
+alter table orders add column if not exists ana_marka text;
